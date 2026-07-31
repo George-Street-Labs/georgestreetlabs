@@ -229,6 +229,12 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;font-size:13px;color
     <div>© 2026 George Street Labs LLC. All rights reserved.</div>
   </div>
 </footer>
-
+<script is:inline>
+  // Netlify Identity sends invite/recovery tokens to the site root.
+  // Forward them to /admin so Decap CMS can process the token.
+  if (window.location.hash && window.location.hash.includes('_token=')) {
+    window.location.href = '/admin/' + window.location.hash;
+  }
+</script>
 </body>
 </html>
