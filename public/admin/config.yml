@@ -13,6 +13,7 @@ collections:
     folder: "src/content/products"
     create: true
     slug: "{{slug}}"
+    identifier_field: name
     fields:
       - { label: "Name", name: "name", widget: "string" }
       - { label: "Tagline", name: "tagline", widget: "string" }
