@@ -5,7 +5,7 @@ tagline: Turn any room into an accurate floor plan with your iPhone's LiDAR.
   subscription, no ads.
 fileNo: GSL-SWEEP
 status: Beta
-live: false
+live: true
 visible: true
 order: 99
 features: []
