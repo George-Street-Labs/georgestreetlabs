@@ -1,0 +1,41 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+site_url: https://georgestreetlabs.com
+
+collections:
+  - name: "products"
+    label: "Products"
+    folder: "src/content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Tagline", name: "tagline", widget: "string" }
+      - { label: "File number", name: "fileNo", widget: "string", hint: "e.g. GSL-006" }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["Production", "Beta", "In development", "Prototype", "Concept"]
+      - label: "Live product?"
+        name: "live"
+        widget: "boolean"
+        default: false
+        hint: "ON = full featured card in the product lineup. OFF = small 'On the bench' teaser."
+      - label: "Visible on site?"
+        name: "visible"
+        widget: "boolean"
+        default: true
+        hint: "Turn OFF to hide this product from the website entirely."
+      - { label: "Order", name: "order", widget: "number", default: 99, value_type: "int" }
+      - label: "Feature chips"
+        name: "features"
+        widget: "list"
+        required: false
+        default: []
+        field: { label: "Feature", name: "feature", widget: "string" }
+      - { label: "Description", name: "body", widget: "markdown" }
