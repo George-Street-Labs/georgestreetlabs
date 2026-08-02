@@ -1,10 +1,10 @@
 ---
-name: "Course"
-tagline: "An interactive layer for the dining experience"
-fileNo: "GSL-002"
-status: "Concept"
+name: Course
+tagline: An interactive layer for the dining experience
+fileNo: GSL-002
+status: Concept
 live: false
-visible: true
+visible: false
 order: 2
 features: []
 ---
