@@ -1,10 +1,10 @@
 ---
-name: "Plateworks"
-tagline: "Turn a night of dishes into a piece of art"
-fileNo: "GSL-005"
-status: "Concept"
+name: Plateworks
+tagline: Turn a night of dishes into a piece of art
+fileNo: GSL-005
+status: Concept
 live: false
-visible: true
+visible: false
 order: 5
 features: []
 ---
