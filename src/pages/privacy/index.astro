@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import site from '../../data/site.json';
+import privacy from '../../data/privacy.json';
+import { md, mdInline } from '../../lib/md';
+
+// The primary privacy page: the company-wide policy plus a directory of the
+// per-application policies. The list merges two sources on one order scale —
+// privacy policy entries from the CMS, and any hand-typed extra links.
+const entries = (await getCollection('privacy'))
+  .filter(e => e.data.visible)
+  .map(e => ({
+    label: e.data.title,
+    summary: e.data.summary,
+    platforms: e.data.platforms ?? [],
+    effectiveDate: e.data.effectiveDate,
+    url: e.data.policyType === 'external' ? (e.data.externalUrl || '') : `/privacy/${e.slug}/`,
+    external: e.data.policyType === 'external',
+    order: e.data.order ?? 50,
+    nofollow: e.data.nofollow !== false,
+  }));
+
+const extraLinks = ((privacy.directory?.extraLinks ?? []) as any[]).map(l => ({
+  label: l.label,
+  summary: l.summary,
+  platforms: [] as string[],
+  effectiveDate: undefined,
+  url: l.url,
+  external: !!l.newTab || /^https?:\/\//.test(l.url || ''),
+  order: l.order ?? 50,
+  nofollow: l.nofollow !== false,
+}));
+
+const policies = [...entries, ...extraLinks]
+  .filter(p => p.label && p.url)
+  .sort((a, b) => a.order - b.order);
+
+const dir = privacy.directory ?? ({} as any);
+const showDirectory = dir.show !== false;
+const bodyFirst = privacy.bodyPosition === 'above';
+const title = privacy.seo?.metaTitle || `${privacy.title || 'Privacy'}${site.seo.titleSuffix}`;
+
+// rel="nofollow" on every policy link by default, so a page whose whole job is
+// pointing at other documents doesn't hand out ranking signal.
+const relFor = (p: { external: boolean; nofollow: boolean }) =>
+  [p.external && 'noopener noreferrer', p.nofollow && 'nofollow'].filter(Boolean).join(' ') || undefined;
+---
+<Base
+  title={title}
+  description={privacy.description}
+  noindex={privacy.seo?.noindex === true}
+  nofollow={privacy.seo?.nofollow === true}
+>
+  <main class="page">
+    <div class="wrap">
+      <div class="page-head">
+        <div class="eyebrow">{privacy.eyebrow || site.brand.name}</div>
+        <h1>{privacy.title || 'Privacy'}</h1>
+        {privacy.description && <p class="page-desc">{privacy.description}</p>}
+      </div>
+
+      {privacy.intro && <div class="privacy-intro" set:html={md(privacy.intro)} />}
+
+      {privacy.body && bodyFirst && (
+        <article class="prose">
+          {privacy.bodyTitle && <h2>{privacy.bodyTitle}</h2>}
+          <Fragment set:html={md(privacy.body)} />
+        </article>
+      )}
+
+      {showDirectory && (
+        <section class="policy-dir" aria-labelledby="policy-dir-title">
+          {dir.title && <h2 id="policy-dir-title" class="dir-title">{dir.title}</h2>}
+          {dir.intro && <p class="dir-intro" set:html={mdInline(dir.intro)} />}
+
+          {policies.length > 0 ? (
+            <ul class="policy-list">
+              {policies.map(p => (
+                <li class="policy-item">
+                  <a
+                    class="policy-link"
+                    href={p.url}
+                    target={p.external ? '_blank' : undefined}
+                    rel={relFor(p)}
+                  >
+                    <span class="policy-name">
+                      {p.label}
+                      {p.external && <span class="ext" aria-label="opens in a new tab">↗</span>}
+                    </span>
+                    {p.summary && <span class="policy-summary">{p.summary}</span>}
+                    {(p.platforms.length > 0 || p.effectiveDate) && (
+                      <span class="policy-meta">
+                        {p.platforms.map(pl => <span class="chip">{pl}</span>)}
+                        {p.effectiveDate && <span class="date">Updated {p.effectiveDate}</span>}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            dir.emptyText && <p class="dir-empty">{dir.emptyText}</p>
+          )}
+        </section>
+      )}
+
+      {privacy.body && !bodyFirst && (
+        <article class="prose">
+          {privacy.bodyTitle && <h2>{privacy.bodyTitle}</h2>}
+          <Fragment set:html={md(privacy.body)} />
+        </article>
+      )}
+    </div>
+  </main>
+</Base>
+
+<style>
+.privacy-intro{margin-top:22px;max-width:68ch;color:var(--ink-soft);font-size:16px}
+.privacy-intro :global(p){margin-bottom:14px}
+.privacy-intro :global(p:last-child){margin-bottom:0}
+.privacy-intro :global(a){color:var(--sign-green-dark);font-weight:500}
+
+.policy-dir{margin-top:40px}
+.dir-title{font-family:var(--font-display);font-weight:700;font-size:24px;letter-spacing:-.01em;margin-bottom:10px}
+.dir-intro{color:var(--ink-soft);font-size:15.5px;max-width:68ch;margin-bottom:6px}
+.dir-empty{color:var(--ink-soft);font-size:15px;font-style:italic;margin-top:14px}
+
+.policy-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:22px;max-width:820px}
+.policy-item{margin:0}
+.policy-link{display:flex;flex-direction:column;gap:6px;height:100%;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;text-decoration:none;transition:border-color .15s ease,transform .15s ease}
+.policy-link:hover{border-color:var(--ink-soft);transform:translateY(-2px)}
+.policy-name{font-family:var(--font-display);font-weight:600;font-size:17px;color:var(--ink);display:flex;align-items:center;gap:7px}
+.policy-name .ext{font-size:13px;color:var(--ink-soft)}
+.policy-summary{font-size:14px;color:var(--ink-soft);line-height:1.5}
+.policy-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px}
+.policy-meta .chip{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sign-green-dark);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.policy-meta .date{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft)}
+</style>

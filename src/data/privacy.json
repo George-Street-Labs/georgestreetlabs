@@ -1,0 +1,28 @@
+{
+  "enabled": true,
+  "eyebrow": "",
+  "title": "Privacy",
+  "description": "How George Street Labs handles your data, and the privacy policy for each of our applications.",
+  "intro": "We build local-first software: wherever we can, your data stays on your device. Each application has its own policy covering exactly what it collects, so pick the one you're looking for below.",
+  "bodyPosition": "below",
+  "bodyTitle": "George Street Labs — company privacy policy",
+  "body": "",
+  "directory": {
+    "show": true,
+    "title": "Policies by application",
+    "intro": "",
+    "emptyText": "Application privacy policies will be listed here.",
+    "extraLinks": []
+  },
+  "footerLink": {
+    "show": true,
+    "label": "Privacy",
+    "order": 90,
+    "nofollow": true
+  },
+  "seo": {
+    "metaTitle": "",
+    "noindex": false,
+    "nofollow": false
+  }
+}

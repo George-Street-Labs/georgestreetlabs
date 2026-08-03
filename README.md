@@ -11,6 +11,8 @@ through your Git repo — no code changes needed for content.
 | **Site settings** | Brand, navigation, footer, SEO defaults | `src/data/site.json` |
 | **Products** | The product lineup and the bench | `src/content/products/*.md` |
 | **Pages** | Top-level pages, rich text or raw HTML | `src/content/pages/*.md` |
+| **Privacy** | The main privacy page and its footer link | `src/data/privacy.json` |
+| **Privacy policies** | One policy per application | `src/content/privacy/*.md` |
 
 ### Home page
 The hero is always at the top. Everything below it — Product lineup, On the
@@ -57,6 +59,38 @@ Your HTML inherits the site's fonts and CSS variables — `var(--ink)`,
 `var(--paper)`, `var(--radius)` — and helper classes `.wrap`, `.btn.btn-primary`,
 `.btn.btn-ghost`, `.eyebrow`, `.section-title`. `src/content/pages/html-example.md`
 is a working template; delete it once you don't need it.
+
+### Privacy policies
+App stores require every application to publish a reachable privacy policy URL,
+so the CMS has a section for exactly that. It is two pieces:
+
+- **Privacy policies** — one entry per application, published at
+  `georgestreetlabs.com/privacy/<name>/`. Each has a name, a one-line summary,
+  platform chips, an effective date and an order number.
+- **Privacy** — the primary page at `/privacy/`, which lists all of those
+  policies and links to each one. A **Privacy** link is added to the footer
+  automatically; turn it off (or rename/reorder it) under Privacy → Footer link.
+
+**Policy type** works like it does on Pages, with one extra option:
+
+- **Rich text** — the "Policy text" editor, in the styled prose card.
+- **Custom HTML** — the "HTML" box, pasted in verbatim.
+- **Link to a policy hosted elsewhere** — no page is built; the directory entry
+  links straight out to the address you give.
+
+The primary page can also carry the **company-wide policy** itself: fill in
+"Company-wide policy" and it renders above or below the list, your choice. Its
+**Intro** and the policies list both link out to the individual policies, and
+**Extra links** in the directory covers anything that isn't a policy entry — a
+cookie notice, a terms page, a partner's policy. Extra links and policy entries
+share one order scale, lowest first, so they interleave.
+
+**No-follow.** Every link to a policy on the primary page carries
+`rel="nofollow"` by default, as does the footer's Privacy link — the usual
+treatment for legal pages you don't want competing with product pages in search.
+Each one has its own switch if you want to hand out the ranking credit after
+all. Under Advanced / SEO, both the primary page and each individual policy can
+also be set to noindex, or to no-follow every link they contain at once.
 
 ### Contact form
 The Contact section shows a **contact form** (name, email, subject, message)

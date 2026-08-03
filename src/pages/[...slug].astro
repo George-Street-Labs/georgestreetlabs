@@ -6,7 +6,9 @@ import site from '../data/site.json';
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
   return pages
-    .filter(p => p.data.visible)
+    // /privacy/ belongs to the privacy section; a page with that slug would
+    // collide with it, so it is skipped rather than breaking the build.
+    .filter(p => p.data.visible && p.slug !== 'privacy')
     .map(p => ({ params: { slug: p.slug }, props: { page: p } }));
 }
 
@@ -72,23 +74,9 @@ const showHeader = layout.showHeader !== false;
 </Base>
 
 <style>
-.page{padding:72px 0 88px}
+/* .page, .page h1, .page-desc and .prose live in the global stylesheet in
+   Base.astro — every inner page shares them. */
 .page-html.page-wide{padding:0 0 0}
 .page-html.page-wide .page-head{padding-top:72px;padding-bottom:8px}
-h1{font-family:var(--font-display);font-weight:700;font-size:clamp(32px,4.6vw,48px);line-height:1.1;letter-spacing:-.015em;margin-bottom:14px;max-width:20ch}
-.page-desc{font-size:18px;color:var(--ink-soft);max-width:56ch;margin-bottom:8px}
-.prose{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:40px 44px;margin-top:34px;max-width:820px}
-@media(max-width:640px){.prose{padding:26px 22px}}
-.prose :global(h2){font-family:var(--font-display);font-weight:700;font-size:24px;letter-spacing:-.01em;margin:34px 0 12px}
-.prose :global(h2:first-child){margin-top:0}
-.prose :global(h3){font-family:var(--font-display);font-weight:600;font-size:19px;margin:26px 0 10px}
-.prose :global(p){color:var(--ink-soft);margin-bottom:16px;font-size:15.5px}
-.prose :global(ul),.prose :global(ol){margin:0 0 16px 22px;color:var(--ink-soft);font-size:15.5px}
-.prose :global(li){margin-bottom:6px}
-.prose :global(a){color:var(--sign-green-dark);font-weight:500}
-.prose :global(img){border-radius:10px;border:1px solid var(--line);margin:10px 0}
-.prose :global(blockquote){border-left:3px solid var(--sign-green);padding-left:18px;margin:20px 0;color:var(--ink-soft);font-style:italic}
-.prose :global(hr){border:none;border-top:1px solid var(--line);margin:28px 0}
-.prose :global(code){font-family:var(--font-mono);font-size:13.5px;background:var(--porcelain);padding:2px 6px;border-radius:5px}
 .raw-html{margin-top:34px}
 </style>

@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import site from '../../data/site.json';
+import privacy from '../../data/privacy.json';
+
+export async function getStaticPaths() {
+  const policies = await getCollection('privacy');
+  return policies
+    // "external" entries live on someone else's site — the directory links
+    // straight out to them, so there is no page to build here.
+    .filter(p => p.data.visible && p.data.policyType !== 'external')
+    .map(p => ({ params: { slug: p.slug }, props: { policy: p } }));
+}
+
+const { policy } = Astro.props;
+const d = policy.data;
+
+const isHtml = d.policyType === 'html';
+const { Content } = isHtml ? { Content: null } : await policy.render();
+
+const seo = d.seoOptions;
+const title = seo.metaTitle || `${d.title} privacy policy${site.seo.titleSuffix}`;
+const backLabel = privacy.title || 'Privacy';
+---
+<Base
+  title={title}
+  description={d.summary}
+  headHtml={seo.headHtml}
+  noindex={seo.noindex}
+  nofollow={seo.nofollow}
+>
+  <main class="page">
+    <div class="wrap">
+      <a class="back-link" href="/privacy/">← All {backLabel.toLowerCase()} policies</a>
+
+      <div class="page-head">
+        <div class="eyebrow">Privacy policy</div>
+        <h1>{d.title}</h1>
+        {d.summary && <p class="page-desc">{d.summary}</p>}
+        {(d.platforms.length > 0 || d.effectiveDate) && (
+          <div class="policy-meta">
+            {d.platforms.map(pl => <span class="chip">{pl}</span>)}
+            {d.effectiveDate && <span class="date">Effective {d.effectiveDate}</span>}
+          </div>
+        )}
+      </div>
+
+      <article class="prose">
+        {isHtml ? <Fragment set:html={d.html} /> : <Content />}
+      </article>
+    </div>
+  </main>
+</Base>
+
+<style>
+.back-link{display:inline-block;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;margin-bottom:26px}
+.back-link:hover{color:var(--ink)}
+.policy-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.policy-meta .chip{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sign-green-dark);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.policy-meta .date{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft)}
+</style>
