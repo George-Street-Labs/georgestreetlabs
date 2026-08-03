@@ -343,10 +343,24 @@ collections:
                 required: false
                 label_singular: "Link"
                 summary: "{{fields.label}} → {{fields.url}}"
+                hint: "The Privacy link is added automatically — turn it off under Privacy → Privacy directory."
                 fields:
                   - { label: "Label", name: "label", widget: "string" }
                   - { label: "Link", name: "url", widget: "string" }
+                  - label: "Order"
+                    name: "order"
+                    widget: "number"
+                    value_type: "int"
+                    default: 50
+                    required: false
+                    hint: "Lower numbers appear further left. The Privacy link defaults to 90."
                   - { label: "Open in a new tab?", name: "newTab", widget: "boolean", default: false, required: false }
+                  - label: "No-follow link?"
+                    name: "nofollow"
+                    widget: "boolean"
+                    default: false
+                    required: false
+                    hint: "ON adds rel=\"nofollow\" — tells search engines not to pass ranking credit through this link."
 
   # ---------------------------------------------------------------------------
   # Products
@@ -502,3 +516,197 @@ collections:
             required: false
             hint: "Meta tags, Open Graph tags, structured data, analytics snippets."
           - { label: "Hide from search engines?", name: "noindex", widget: "boolean", default: false }
+
+  # ---------------------------------------------------------------------------
+  # Privacy — the primary /privacy/ page plus one policy per application.
+  # ---------------------------------------------------------------------------
+  - name: "privacy_settings"
+    label: "Privacy"
+    files:
+      - name: "privacy"
+        label: "Privacy page & directory"
+        file: "src/data/privacy.json"
+        description: "The main privacy page at georgestreetlabs.com/privacy/. It lists every application's policy (edit those under \"Privacy policies\") and can carry the company-wide policy itself."
+        fields:
+          - label: "Show the privacy section?"
+            name: "enabled"
+            widget: "boolean"
+            default: true
+            hint: "OFF removes the Privacy link from the footer. The page itself stays reachable at /privacy/."
+
+          - { label: "Eyebrow text", name: "eyebrow", widget: "string", required: false, hint: "Small label above the title. Defaults to the brand name." }
+          - { label: "Page title", name: "title", widget: "string", default: "Privacy" }
+          - label: "Subtitle"
+            name: "description"
+            widget: "text"
+            required: false
+            hint: "Shown under the title, and used as the page's search description."
+          - label: "Intro"
+            name: "intro"
+            widget: "markdown"
+            required: false
+            hint: "Sits above the list of policies. Links here work like anywhere else."
+
+          - label: "Privacy directory"
+            name: "directory"
+            widget: "object"
+            fields:
+              - { label: "Show the list of application policies?", name: "show", widget: "boolean", default: true }
+              - { label: "List heading", name: "title", widget: "string", required: false }
+              - { label: "Line under the heading", name: "intro", widget: "string", required: false }
+              - label: "Text when the list is empty"
+                name: "emptyText"
+                widget: "string"
+                required: false
+                hint: "Shown only if no application policies are published yet."
+              - label: "Extra links"
+                name: "extraLinks"
+                widget: "list"
+                required: false
+                label_singular: "Link"
+                summary: "{{fields.order}} · {{fields.label}} → {{fields.url}}"
+                hint: "For anything that isn't a policy entry — a cookie notice, a partner's policy, a terms page. These slot into the same list by their order number."
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Link", name: "url", widget: "string", hint: "A path like /terms/ or a full https:// address." }
+                  - { label: "One-line description", name: "summary", widget: "string", required: false }
+                  - { label: "Order", name: "order", widget: "number", value_type: "int", default: 50, hint: "Shares the scale with each policy's own order number." }
+                  - { label: "Open in a new tab?", name: "newTab", widget: "boolean", default: false, required: false }
+                  - label: "No-follow link?"
+                    name: "nofollow"
+                    widget: "boolean"
+                    default: true
+                    required: false
+                    hint: "ON adds rel=\"nofollow\". Recommended for links out to other companies' policies."
+
+          - label: "Company-wide policy (optional)"
+            name: "body"
+            widget: "markdown"
+            required: false
+            hint: "The policy that covers George Street Labs as a whole. Leave blank to make this page a directory only."
+          - { label: "Company policy heading", name: "bodyTitle", widget: "string", required: false }
+          - label: "Where the company policy goes"
+            name: "bodyPosition"
+            widget: "select"
+            default: "below"
+            options:
+              - { label: "Below the list of applications", value: "below" }
+              - { label: "Above the list of applications", value: "above" }
+
+          - label: "Footer link"
+            name: "footerLink"
+            widget: "object"
+            fields:
+              - { label: "Show in the footer?", name: "show", widget: "boolean", default: true }
+              - { label: "Label", name: "label", widget: "string", default: "Privacy" }
+              - { label: "Order", name: "order", widget: "number", value_type: "int", default: 90, hint: "Shares the scale with the footer links in Site settings." }
+              - label: "No-follow link?"
+                name: "nofollow"
+                widget: "boolean"
+                default: true
+                hint: "ON adds rel=\"nofollow\" to the footer's Privacy link — the usual choice for a legal page you don't want competing in search."
+
+          - label: "Advanced / SEO"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Browser tab title override", name: "metaTitle", widget: "string", required: false }
+              - { label: "Hide this page from search engines?", name: "noindex", widget: "boolean", default: false }
+              - label: "No-follow every link on this page?"
+                name: "nofollow"
+                widget: "boolean"
+                default: false
+                hint: "Adds a page-level robots nofollow. The individual policy links already carry their own rel=\"nofollow\"."
+
+  # ---------------------------------------------------------------------------
+  # Privacy policies — one per application, listed on /privacy/.
+  # ---------------------------------------------------------------------------
+  - name: "privacy"
+    label: "Privacy policies"
+    label_singular: "Privacy policy"
+    folder: "src/content/privacy"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    description: "One policy per application, published at georgestreetlabs.com/privacy/<name>/ and listed on the main privacy page."
+    fields:
+      - { label: "Application name", name: "title", widget: "string", hint: "Used as the link text in the privacy directory." }
+      - label: "One-line description"
+        name: "summary"
+        widget: "string"
+        required: false
+        hint: "Shown under the name in the directory, and used as the page's search description."
+      - label: "Platforms"
+        name: "platforms"
+        widget: "list"
+        required: false
+        default: []
+        field: { label: "Platform", name: "platform", widget: "string" }
+        hint: "Small chips next to the entry, e.g. iOS, Android, Web."
+      - label: "Effective date"
+        name: "effectiveDate"
+        widget: "string"
+        required: false
+        hint: "Free text, e.g. \"August 2026\". Shown on the policy and in the directory."
+      - label: "Order"
+        name: "order"
+        widget: "number"
+        value_type: "int"
+        default: 50
+        hint: "Lower numbers appear first in the directory."
+      - label: "Visible on site?"
+        name: "visible"
+        widget: "boolean"
+        default: true
+        hint: "Turn OFF to unpublish this policy and drop it from the directory."
+
+      - label: "Policy type"
+        name: "policyType"
+        widget: "select"
+        default: "standard"
+        options:
+          - { label: "Rich text (styled page)", value: "standard" }
+          - { label: "Custom HTML", value: "html" }
+          - { label: "Link to a policy hosted elsewhere", value: "external" }
+        hint: "The first two publish a page here. The third only adds a link to the directory."
+      - label: "Policy text"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Used when Policy type is \"Rich text\"."
+      - label: "HTML"
+        name: "html"
+        widget: "code"
+        default_language: "html"
+        allow_language_selection: false
+        output_code_only: true
+        required: false
+        hint: "Used when Policy type is \"Custom HTML\"."
+      - label: "External policy address"
+        name: "externalUrl"
+        widget: "string"
+        required: false
+        hint: "Used when Policy type is \"Link to a policy hosted elsewhere\". Must be a full https:// address."
+
+      - label: "No-follow this link?"
+        name: "nofollow"
+        widget: "boolean"
+        default: true
+        hint: "ON adds rel=\"nofollow\" to this policy's link on the main privacy page."
+
+      - label: "Advanced / SEO"
+        name: "seoOptions"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "Browser tab title override", name: "metaTitle", widget: "string", required: false }
+          - label: "Extra <head> code"
+            name: "headHtml"
+            widget: "code"
+            default_language: "html"
+            allow_language_selection: false
+            output_code_only: true
+            required: false
+          - { label: "Hide this policy from search engines?", name: "noindex", widget: "boolean", default: false }
+          - { label: "No-follow every link on this policy?", name: "nofollow", widget: "boolean", default: false }

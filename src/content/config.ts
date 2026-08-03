@@ -67,4 +67,43 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { products, pages };
+// One privacy policy per application. These are listed on the primary privacy
+// page at /privacy/ and, unless they point somewhere else, published at
+// /privacy/<slug>/.
+const privacy = defineCollection({
+  type: 'content',
+  schema: z.object({
+    // Usually the application name — this is the link text in the directory.
+    title: z.string(),
+    // One line under the link in the directory list.
+    summary: z.string().optional(),
+    // Small chips next to the entry, e.g. "iOS", "Android", "Web".
+    platforms: z.array(z.string()).default([]),
+    // Free text, e.g. "March 2026" — shown on the policy and in the directory.
+    effectiveDate: z.string().optional(),
+    order: z.number().default(50),
+    visible: z.boolean().default(true),
+
+    // "standard" renders the markdown body, "html" renders the raw `html`
+    // field, and "external" publishes no page at all — the directory entry
+    // links straight out to `externalUrl` (a policy hosted somewhere else).
+    policyType: z.enum(['standard', 'html', 'external']).default('standard'),
+    html: z.string().optional(),
+    externalUrl: z.string().url().optional(),
+
+    // rel="nofollow" on the directory's link to this policy.
+    nofollow: z.boolean().default(true),
+
+    seoOptions: z
+      .object({
+        metaTitle: z.string().optional(),
+        headHtml: z.string().optional(),
+        noindex: z.boolean().default(false),
+        // Tells search engines not to follow any link on the policy itself.
+        nofollow: z.boolean().default(false),
+      })
+      .default({}),
+  }),
+});
+
+export const collections = { products, pages, privacy };
