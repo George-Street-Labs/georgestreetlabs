@@ -1,0 +1,26 @@
+{
+  "brand": {
+    "name": "GEORGE STREET LABS",
+    "logo": "",
+    "showDot": true,
+    "href": "/"
+  },
+  "seo": {
+    "titleSuffix": " — George Street Labs",
+    "defaultDescription": "George Street Labs is a small product studio. Our flagship, ArtView Privé, presents your art collection like a private gallery — local-first and museum-grade."
+  },
+  "nav": {
+    "includePages": true,
+    "links": [
+      { "label": "Products", "url": "/#products", "order": 10, "newTab": false },
+      { "label": "The bench", "url": "/#bench", "order": 20, "newTab": false },
+      { "label": "Studio", "url": "/#about", "order": 30, "newTab": false },
+      { "label": "Contact", "url": "/#contact", "order": 90, "newTab": false }
+    ]
+  },
+  "footer": {
+    "monoLine": "GEORGE STREET LABS — FILE STATUS: ACTIVE",
+    "copyright": "© 2026 George Street Labs LLC. All rights reserved.",
+    "links": []
+  }
+}

@@ -1,0 +1,99 @@
+---
+import { md, mdInline } from '../lib/md';
+
+// Renders one of the "Extra sections" authored in the CMS on the Home page.
+// The shape is a Decap variable-type list, so every item carries a `type`.
+interface Props {
+  section: any;
+}
+const { section: s } = Astro.props;
+const style = s.style || 'light';
+const anchor = s.anchor || undefined;
+---
+{s.type === 'text' && (
+  <section id={anchor} class={`custom custom-text style-${style}`}>
+    <div class="wrap">
+      <div class={`custom-inner style-${style}`}>
+        {s.eyebrow && <div class="eyebrow">{s.eyebrow}</div>}
+        {s.title && <h2 class="section-title">{s.title}</h2>}
+        {s.body && <div class="custom-body" set:html={md(s.body)} />}
+      </div>
+    </div>
+  </section>
+)}
+
+{s.type === 'cards' && (
+  <section id={anchor} class={`custom custom-cards style-${style}`}>
+    <div class="wrap">
+      <div class={`custom-inner style-${style}`}>
+        {s.eyebrow && <div class="eyebrow">{s.eyebrow}</div>}
+        {s.title && <h2 class="section-title">{s.title}</h2>}
+        {s.intro && <p class="section-intro" set:html={mdInline(s.intro)} />}
+        <div class="card-grid">
+          {(s.cards ?? []).map((c: any) => (
+            <div class="custom-card">
+              {c.image && <img src={c.image} alt="" class="card-img" />}
+              {c.label && <span class="card-label">{c.label}</span>}
+              {c.title && <h4>{c.title}</h4>}
+              {c.body && <div class="card-body" set:html={md(c.body)} />}
+              {c.url && c.linkLabel && <a class="card-link" href={c.url}>{c.linkLabel} →</a>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+{s.type === 'cta' && (
+  <section id={anchor} class="custom custom-cta">
+    <div class="wrap">
+      <div class="contact-card">
+        <div>
+          {s.title && <h2>{s.title}</h2>}
+          {s.body && <p set:html={mdInline(s.body)} />}
+        </div>
+        {s.buttonLabel && s.buttonUrl && (
+          <a class="btn btn-primary" href={s.buttonUrl}>{s.buttonLabel}</a>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+{s.type === 'html' && (
+  s.fullWidth
+    ? <section id={anchor} class="custom custom-html" set:html={s.html} />
+    : <section id={anchor} class="custom custom-html"><div class="wrap" set:html={s.html} /></section>
+)}
+
+<style is:global>
+.custom{padding:72px 0}
+.custom + .custom{padding-top:0}
+.custom-inner.style-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:44px 46px}
+.custom-inner.style-dark{background:var(--ink);color:#e8edf2;border-radius:20px;padding:56px 52px}
+.custom-inner.style-dark .eyebrow{color:var(--tape-amber)}
+.custom-inner.style-dark .eyebrow::after{background:rgba(255,255,255,.18)}
+.custom-inner.style-dark h2,.custom-inner.style-dark h3,.custom-inner.style-dark h4{color:#fff}
+.custom-inner.style-dark .custom-body,.custom-inner.style-dark .custom-body p,.custom-inner.style-dark .section-intro{color:#aebccb}
+.custom-inner.style-dark .custom-card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.14)}
+@media(max-width:640px){.custom-inner.style-card,.custom-inner.style-dark{padding:30px 24px}}
+
+.custom-body{color:var(--ink-soft);font-size:15.5px;max-width:68ch}
+.custom-body p{margin-bottom:14px}
+.custom-body p:last-child{margin-bottom:0}
+.custom-body h3{font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--ink);margin:26px 0 10px}
+.custom-body ul,.custom-body ol{margin:0 0 14px 22px}
+.custom-body li{margin-bottom:6px}
+.custom-body a{color:var(--sign-green-dark);font-weight:500}
+.custom-body img{border-radius:10px;border:1px solid var(--line);margin:10px 0}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:34px}
+.custom-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px}
+.custom-card .card-img{width:100%;border-radius:9px;margin-bottom:14px}
+.custom-card .card-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--sign-green);display:block;margin-bottom:8px}
+.custom-card h4{font-family:var(--font-display);font-weight:600;font-size:18px;margin-bottom:6px}
+.custom-card .card-body{font-size:14px;color:var(--ink-soft)}
+.custom-card .card-body p{margin:0 0 10px}
+.custom-card .card-link{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:600;color:var(--sign-green-dark);text-decoration:none}
+</style>

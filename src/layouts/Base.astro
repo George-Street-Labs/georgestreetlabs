@@ -1,0 +1,147 @@
+---
+import { getCollection } from 'astro:content';
+import site from '../data/site.json';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Skip the site header and footer entirely (standalone custom pages). */
+  bare?: boolean;
+  /** Extra markup injected into <head> — meta tags, analytics snippets, etc. */
+  headHtml?: string;
+  noindex?: boolean;
+}
+const {
+  title,
+  description = site.seo.defaultDescription,
+  bare = false,
+  headHtml = '',
+  noindex = false,
+} = Astro.props;
+
+// The nav is the merge of two sources, sorted together by "order":
+//   1. Links typed into Site settings → Navigation (can point anywhere).
+//   2. CMS pages with "Show in navigation" on, when "Include pages" is on.
+const pageLinks = site.nav.includePages
+  ? (await getCollection('pages'))
+      .filter(p => p.data.visible && p.data.showInNav)
+      .map(p => ({
+        label: p.data.navLabel || p.data.title,
+        url: `/${p.slug}/`,
+        order: p.data.order,
+        newTab: false,
+      }))
+  : [];
+
+const navLinks = [...(site.nav.links ?? []), ...pageLinks]
+  .filter(l => l.label && l.url)
+  .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+
+const footerLinks = site.footer.links ?? [];
+const isCurrent = (url: string) => Astro.url.pathname === url;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="m3FlIA3rzpCKdcAesvSamKjEafyIGHbErdSN7qLYfyk" />
+<title>{title}</title>
+<meta name="description" content={description}>
+{noindex && <meta name="robots" content="noindex" />}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style is:global>
+:root{
+  --ink:#15212f; --ink-soft:#3c4a5c; --porcelain:#f2f4f6; --paper:#fff;
+  --sign-green:#0e7a4f; --sign-green-dark:#0a5c3c; --tape-amber:#e8a020;
+  --line:#d6dce3; --proto-blue:#2660a4; --radius:14px;
+  --font-display:"Bricolage Grotesque",system-ui,sans-serif;
+  --font-body:"Inter",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{font-family:var(--font-body);color:var(--ink);background:var(--porcelain);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+:focus-visible{outline:3px solid var(--tape-amber);outline-offset:2px;border-radius:4px}
+
+nav.site-nav{position:sticky;top:0;z-index:50;background:rgba(242,244,246,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.nav-brand{font-family:var(--font-mono);font-weight:600;font-size:14px;letter-spacing:.06em;text-decoration:none;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.nav-brand .dot{width:10px;height:10px;border-radius:3px;background:var(--sign-green);display:inline-block}
+.nav-brand .brand-logo{height:24px;width:auto;border-radius:5px}
+.nav-links{display:flex;gap:24px;font-size:14px;font-weight:500;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{text-decoration:none;color:var(--ink-soft);white-space:nowrap}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a[aria-current="page"]{color:var(--ink)}
+@media(max-width:640px){.nav-links{gap:14px;font-size:13px}}
+
+.eyebrow{font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--sign-green);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.eyebrow::after{content:"";flex:1;max-width:80px;height:1px;background:var(--line)}
+.section-title{font-family:var(--font-display);font-weight:700;font-size:clamp(26px,3.6vw,38px);letter-spacing:-.01em;margin-bottom:14px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;text-decoration:none;padding:13px 24px;border-radius:10px;transition:transform .15s ease,box-shadow .15s ease}
+.btn-primary{background:var(--ink);color:#fff;box-shadow:0 4px 14px rgba(21,33,47,.25)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-ghost{border:1.5px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--ink-soft)}
+
+footer{border-top:1px solid var(--line);padding:36px 0 48px;font-size:13px;color:var(--ink-soft)}
+.foot-inner{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center}
+.foot-inner .mono{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em}
+.foot-links{display:flex;flex-wrap:wrap;gap:18px}
+.foot-links a{text-decoration:none}
+.foot-links a:hover{color:var(--ink)}
+</style>
+{headHtml && <Fragment set:html={headHtml} />}
+</head>
+<body>
+
+{!bare && (
+<nav class="site-nav">
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href={site.brand.href || '/'}>
+      {site.brand.logo
+        ? <img class="brand-logo" src={site.brand.logo} alt="" />
+        : site.brand.showDot && <span class="dot" aria-hidden="true"></span>}
+      <span set:html={(site.brand.name || '').replace(/ /g, '&nbsp;')} />
+    </a>
+    <div class="nav-links">
+      {navLinks.map(l => (
+        <a
+          href={l.url}
+          target={l.newTab ? '_blank' : undefined}
+          rel={l.newTab ? 'noopener noreferrer' : undefined}
+          aria-current={isCurrent(l.url) ? 'page' : undefined}
+        >{l.label}</a>
+      ))}
+    </div>
+  </div>
+</nav>
+)}
+
+<slot />
+
+{!bare && (
+<footer>
+  <div class="wrap foot-inner">
+    <div class="mono">{site.footer.monoLine}</div>
+    {footerLinks.length > 0 && (
+      <div class="foot-links">
+        {footerLinks.map(l => (
+          <a href={l.url} target={l.newTab ? '_blank' : undefined} rel={l.newTab ? 'noopener noreferrer' : undefined}>{l.label}</a>
+        ))}
+      </div>
+    )}
+    <div>{site.footer.copyright}</div>
+  </div>
+</footer>
+)}
+
+</body>
+</html>
