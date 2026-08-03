@@ -8,6 +8,349 @@ public_folder: "/images"
 site_url: https://georgestreetlabs.com
 
 collections:
+  # ---------------------------------------------------------------------------
+  # Home page — every section of the front page, editable and reorderable.
+  # ---------------------------------------------------------------------------
+  - name: "home"
+    label: "Home page"
+    files:
+      - name: "home"
+        label: "Home page"
+        file: "src/data/home.json"
+        description: "Everything on the front page except the products themselves (those live under Products)."
+        fields:
+          - label: "Search engine listing"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Browser tab / search title", name: "title", widget: "string" }
+              - label: "Search description"
+                name: "description"
+                widget: "text"
+                required: false
+                hint: "Leave blank to use the site-wide default from Site settings."
+
+          - label: "Hero (top of the page)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Show the hero?", name: "visible", widget: "boolean", default: true }
+              - { label: "Show the street sign?", name: "showSign", widget: "boolean", default: true }
+              - { label: "Sign — main text", name: "signMain", widget: "string", required: false }
+              - label: "Sign — small text under it"
+                name: "signSub"
+                widget: "string"
+                required: false
+                hint: "Spaces become letter-spacing, e.g. \"L A B S\"."
+              - { label: "Sign — side tab", name: "signTab", widget: "string", required: false }
+              - label: "Headline"
+                name: "headline"
+                widget: "string"
+                hint: "Wrap words in *asterisks* to highlight them in green."
+              - { label: "Intro paragraph", name: "lede", widget: "text", required: false }
+              - label: "Buttons"
+                name: "ctas"
+                widget: "list"
+                required: false
+                label_singular: "Button"
+                summary: "{{fields.label}} → {{fields.url}}"
+                fields:
+                  - { label: "Button text", name: "label", widget: "string" }
+                  - label: "Link"
+                    name: "url"
+                    widget: "string"
+                    hint: "#products for a section on this page, /story/ for a page, or a full https:// address."
+                  - label: "Style"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Solid (dark)", value: "primary" }
+                      - { label: "Outline", value: "ghost" }
+                    default: "primary"
+                  - { label: "Open in a new tab?", name: "newTab", widget: "boolean", default: false, required: false }
+              - label: "Corner detail text"
+                name: "coords"
+                widget: "text"
+                required: false
+                hint: "Small mono text in the top right. One line per line. Leave blank to hide."
+
+          - label: "Section — Product lineup"
+            name: "products"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+              - label: "Position on the page"
+                name: "order"
+                widget: "number"
+                value_type: "int"
+                default: 10
+                hint: "Lower numbers appear higher up. All sections — including extra ones — are sorted by this."
+              - { label: "Eyebrow", name: "eyebrow", widget: "string", required: false }
+              - { label: "Heading", name: "title", widget: "string", required: false }
+              - { label: "Intro paragraph", name: "intro", widget: "text", required: false }
+
+          - label: "Section — On the bench"
+            name: "bench"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+              - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 20 }
+              - { label: "Eyebrow", name: "eyebrow", widget: "string", required: false }
+              - { label: "Heading", name: "title", widget: "string", required: false }
+
+          - label: "Section — The studio"
+            name: "about"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+              - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 30 }
+              - { label: "Eyebrow", name: "eyebrow", widget: "string", required: false }
+              - { label: "Heading", name: "title", widget: "string", required: false }
+              - { label: "Body", name: "body", widget: "markdown", required: false }
+              - label: "Principles"
+                name: "principles"
+                widget: "list"
+                required: false
+                label_singular: "Principle"
+                summary: "{{fields.key}} — {{fields.title}}"
+                fields:
+                  - { label: "Label", name: "key", widget: "string", required: false, hint: "e.g. PRINCIPLE 01" }
+                  - { label: "Heading", name: "title", widget: "string" }
+                  - { label: "Body", name: "body", widget: "markdown", required: false }
+
+          - label: "Section — Contact"
+            name: "contact"
+            widget: "object"
+            collapsed: true
+            fields:
+              - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+              - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 90 }
+              - label: "What to show"
+                name: "mode"
+                widget: "select"
+                default: "form"
+                options:
+                  - { label: "Contact form", value: "form" }
+                  - { label: "Email button only", value: "button" }
+              - { label: "Heading", name: "title", widget: "string", required: false }
+              - { label: "Body", name: "body", widget: "text", required: false }
+              - label: "Email button"
+                name: "buttonLabel"
+                widget: "string"
+                required: false
+                hint: "Only used when \"What to show\" is set to Email button only."
+              - { label: "Email button link", name: "buttonUrl", widget: "string", required: false, hint: "e.g. mailto:info@georgestreetlabs.com" }
+              - label: "Contact form"
+                name: "form"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Name field label", name: "nameLabel", widget: "string", default: "Your name" }
+                  - { label: "Email field label", name: "emailLabel", widget: "string", default: "Email" }
+                  - { label: "Include a subject field?", name: "showSubject", widget: "boolean", default: true }
+                  - { label: "Subject field label", name: "subjectLabel", widget: "string", default: "Subject", required: false }
+                  - { label: "Message field label", name: "messageLabel", widget: "string", default: "Message" }
+                  - { label: "Send button text", name: "submitLabel", widget: "string", default: "Send message" }
+                  - label: "Line under the button"
+                    name: "altText"
+                    widget: "string"
+                    required: false
+                    hint: "Markdown links work, e.g. Prefer email? [info@georgestreetlabs.com](mailto:info@georgestreetlabs.com)"
+              - label: "Thank-you page"
+                name: "thanks"
+                widget: "object"
+                collapsed: true
+                fields:
+                  - { label: "Heading", name: "title", widget: "string", default: "Message received." }
+                  - { label: "Body", name: "body", widget: "markdown", required: false }
+                  - { label: "Back-link text", name: "backLabel", widget: "string", default: "Back to the home page" }
+
+          - label: "Extra sections"
+            name: "customSections"
+            widget: "list"
+            required: false
+            label_singular: "Section"
+            summary: "{{fields.title}}"
+            types:
+              - label: "Text block"
+                name: "text"
+                summary: "Text — {{fields.title}}"
+                fields:
+                  - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+                  - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 50 }
+                  - { label: "Eyebrow", name: "eyebrow", widget: "string", required: false }
+                  - { label: "Heading", name: "title", widget: "string", required: false }
+                  - { label: "Body", name: "body", widget: "markdown", required: false }
+                  - label: "Look"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Plain on the page", value: "light" }
+                      - { label: "White card", value: "card" }
+                      - { label: "Dark panel", value: "dark" }
+                    default: "light"
+                  - label: "Anchor id"
+                    name: "anchor"
+                    widget: "string"
+                    required: false
+                    hint: "Optional. Set e.g. 'pricing' to link here with /#pricing from the navigation."
+
+              - label: "Card grid"
+                name: "cards"
+                summary: "Cards — {{fields.title}}"
+                fields:
+                  - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+                  - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 50 }
+                  - { label: "Eyebrow", name: "eyebrow", widget: "string", required: false }
+                  - { label: "Heading", name: "title", widget: "string", required: false }
+                  - { label: "Intro paragraph", name: "intro", widget: "text", required: false }
+                  - label: "Cards"
+                    name: "cards"
+                    widget: "list"
+                    label_singular: "Card"
+                    summary: "{{fields.title}}"
+                    fields:
+                      - { label: "Image (optional)", name: "image", widget: "image", required: false }
+                      - { label: "Small label", name: "label", widget: "string", required: false }
+                      - { label: "Heading", name: "title", widget: "string" }
+                      - { label: "Body", name: "body", widget: "markdown", required: false }
+                      - { label: "Link text", name: "linkLabel", widget: "string", required: false }
+                      - { label: "Link", name: "url", widget: "string", required: false }
+                  - label: "Look"
+                    name: "style"
+                    widget: "select"
+                    options:
+                      - { label: "Plain on the page", value: "light" }
+                      - { label: "White card", value: "card" }
+                      - { label: "Dark panel", value: "dark" }
+                    default: "light"
+                  - { label: "Anchor id", name: "anchor", widget: "string", required: false }
+
+              - label: "Call to action banner"
+                name: "cta"
+                summary: "CTA — {{fields.title}}"
+                fields:
+                  - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+                  - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 50 }
+                  - { label: "Heading", name: "title", widget: "string" }
+                  - { label: "Body", name: "body", widget: "text", required: false }
+                  - { label: "Button text", name: "buttonLabel", widget: "string", required: false }
+                  - { label: "Button link", name: "buttonUrl", widget: "string", required: false }
+                  - { label: "Anchor id", name: "anchor", widget: "string", required: false }
+
+              - label: "Custom HTML block"
+                name: "html"
+                summary: "HTML — {{fields.title}}"
+                fields:
+                  - { label: "Show this section?", name: "visible", widget: "boolean", default: true }
+                  - { label: "Position on the page", name: "order", widget: "number", value_type: "int", default: 50 }
+                  - label: "Internal name"
+                    name: "title"
+                    widget: "string"
+                    required: false
+                    hint: "Only used to label this block in the editor — never shown on the site."
+                  - label: "HTML"
+                    name: "html"
+                    widget: "code"
+                    default_language: "html"
+                    allow_language_selection: false
+                    output_code_only: true
+                    hint: "Pasted as-is into the page. Site CSS variables like var(--sign-green) are available."
+                  - label: "Full browser width?"
+                    name: "fullWidth"
+                    widget: "boolean"
+                    default: false
+                    hint: "OFF keeps it inside the 1080px content column."
+                  - { label: "Anchor id", name: "anchor", widget: "string", required: false }
+
+  # ---------------------------------------------------------------------------
+  # Site settings — brand, navigation, footer, SEO defaults.
+  # ---------------------------------------------------------------------------
+  - name: "settings"
+    label: "Site settings"
+    files:
+      - name: "site"
+        label: "Brand, navigation & footer"
+        file: "src/data/site.json"
+        description: "Applies to every page on the site."
+        fields:
+          - label: "Brand"
+            name: "brand"
+            widget: "object"
+            fields:
+              - { label: "Name in the header", name: "name", widget: "string" }
+              - label: "Logo (optional)"
+                name: "logo"
+                widget: "image"
+                required: false
+                hint: "Replaces the small green square. Leave blank to keep the square."
+              - { label: "Show the green square?", name: "showDot", widget: "boolean", default: true }
+              - { label: "Where the brand links to", name: "href", widget: "string", default: "/" }
+
+          - label: "Search engine defaults"
+            name: "seo"
+            widget: "object"
+            collapsed: true
+            fields:
+              - label: "Title suffix"
+                name: "titleSuffix"
+                widget: "string"
+                hint: "Appended to page titles, e.g. \" — George Street Labs\"."
+              - { label: "Default description", name: "defaultDescription", widget: "text" }
+
+          - label: "Navigation"
+            name: "nav"
+            widget: "object"
+            fields:
+              - label: "Also list CMS pages automatically?"
+                name: "includePages"
+                widget: "boolean"
+                default: true
+                hint: "ON = any page with \"Show in navigation\" turned on appears here too, slotted in by its own order number. Turn OFF to control the nav entirely from the list below."
+              - label: "Links"
+                name: "links"
+                widget: "list"
+                required: false
+                label_singular: "Link"
+                summary: "{{fields.order}} · {{fields.label}} → {{fields.url}}"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - label: "Link"
+                    name: "url"
+                    widget: "string"
+                    hint: "/#products for a home-page section, /story/ for a page, or a full https:// address."
+                  - label: "Order"
+                    name: "order"
+                    widget: "number"
+                    value_type: "int"
+                    default: 50
+                    hint: "Lower numbers appear further left. Pages use their own \"Nav order\" on the same scale."
+                  - { label: "Open in a new tab?", name: "newTab", widget: "boolean", default: false, required: false }
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Small mono line", name: "monoLine", widget: "string", required: false }
+              - { label: "Copyright line", name: "copyright", widget: "string", required: false }
+              - label: "Footer links"
+                name: "links"
+                widget: "list"
+                required: false
+                label_singular: "Link"
+                summary: "{{fields.label}} → {{fields.url}}"
+                fields:
+                  - { label: "Label", name: "label", widget: "string" }
+                  - { label: "Link", name: "url", widget: "string" }
+                  - { label: "Open in a new tab?", name: "newTab", widget: "boolean", default: false, required: false }
+
+  # ---------------------------------------------------------------------------
+  # Products
+  # ---------------------------------------------------------------------------
   - name: "products"
     label: "Products"
     folder: "src/content/products"
@@ -39,4 +382,123 @@ collections:
         required: false
         default: []
         field: { label: "Feature", name: "feature", widget: "string" }
+      - label: "Logo (optional)"
+        name: "logo"
+        widget: "image"
+        required: false
+        hint: "Square works best, transparent PNG/SVG. Shown next to the product name."
+      - label: "Apple App Store link (optional)"
+        name: "appStoreUrl"
+        widget: "string"
+        required: false
+        hint: "Leave blank to hide the App Store button."
+      - label: "Google Play link (optional)"
+        name: "playStoreUrl"
+        widget: "string"
+        required: false
+        hint: "Leave blank to hide the Play Store button."
       - { label: "Description", name: "body", widget: "markdown" }
+
+  # ---------------------------------------------------------------------------
+  # Pages — standard rich-text pages or raw custom-HTML pages at the top level.
+  # ---------------------------------------------------------------------------
+  - name: "pages"
+    label: "Pages"
+    label_singular: "Page"
+    folder: "src/content/pages"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    description: "Top-level pages at georgestreetlabs.com/<name>/. Choose rich text or write raw HTML."
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Page type"
+        name: "pageType"
+        widget: "select"
+        default: "standard"
+        options:
+          - { label: "Rich text (styled page)", value: "standard" }
+          - { label: "Custom HTML", value: "html" }
+        hint: "Rich text uses the \"Page content\" editor below. Custom HTML uses the \"HTML\" box instead."
+
+      - label: "Nav label (optional)"
+        name: "navLabel"
+        widget: "string"
+        required: false
+        hint: "Short label for the navigation bar. Falls back to the title."
+      - label: "Show in navigation?"
+        name: "showInNav"
+        widget: "boolean"
+        default: true
+      - label: "Nav order"
+        name: "order"
+        widget: "number"
+        default: 99
+        value_type: "int"
+        hint: "Lower numbers appear earlier. Shares the same scale as the links in Site settings → Navigation."
+      - label: "Subtitle (optional)"
+        name: "description"
+        widget: "string"
+        required: false
+        hint: "Shown under the page title, and used as the page's search description."
+      - label: "Visible on site?"
+        name: "visible"
+        widget: "boolean"
+        default: true
+        hint: "Turn OFF to unpublish the page entirely."
+
+      - label: "Page content"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Used when Page type is \"Rich text\"."
+
+      - label: "HTML"
+        name: "html"
+        widget: "code"
+        default_language: "html"
+        allow_language_selection: false
+        output_code_only: true
+        required: false
+        hint: "Used when Page type is \"Custom HTML\". Pasted into the page as-is. Site fonts and CSS variables (var(--ink), var(--sign-green), .wrap, .btn) are available."
+
+      - label: "Layout options"
+        name: "layoutOptions"
+        widget: "object"
+        collapsed: true
+        fields:
+          - label: "Header & footer"
+            name: "chrome"
+            widget: "select"
+            default: "site"
+            options:
+              - { label: "Keep the site header and footer", value: "site" }
+              - { label: "Standalone — no header or footer", value: "standalone" }
+            hint: "Only applies to Custom HTML pages."
+          - label: "Show the title block?"
+            name: "showHeader"
+            widget: "boolean"
+            default: true
+            hint: "The eyebrow, big title and subtitle at the top of the page."
+          - { label: "Eyebrow text", name: "eyebrow", widget: "string", required: false, hint: "Small label above the title. Defaults to the brand name." }
+          - label: "Full browser width?"
+            name: "wide"
+            widget: "boolean"
+            default: false
+            hint: "OFF keeps content inside the 1080px column."
+
+      - label: "Advanced / SEO"
+        name: "seoOptions"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "Browser tab title override", name: "metaTitle", widget: "string", required: false, hint: "Leave blank to use the title plus the site suffix." }
+          - label: "Extra <head> code"
+            name: "headHtml"
+            widget: "code"
+            default_language: "html"
+            allow_language_selection: false
+            output_code_only: true
+            required: false
+            hint: "Meta tags, Open Graph tags, structured data, analytics snippets."
+          - { label: "Hide from search engines?", name: "noindex", widget: "boolean", default: false }

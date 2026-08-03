@@ -1,0 +1,91 @@
+{
+  "seo": {
+    "title": "George Street Labs — A product workshop",
+    "description": ""
+  },
+  "hero": {
+    "visible": true,
+    "showSign": true,
+    "signMain": "George St",
+    "signSub": "L A B S",
+    "signTab": "EST. 2026",
+    "headline": "Apps built for *real life*, not just screens.",
+    "lede": "George Street Labs is a small product workshop. We take ideas from sketch to shipped — starting with ArtView Privé, a private gallery for the art you actually own.",
+    "ctas": [
+      {
+        "label": "See what we're building →",
+        "url": "#products",
+        "style": "primary",
+        "newTab": false
+      },
+      {
+        "label": "Work with us",
+        "url": "#contact",
+        "style": "ghost",
+        "newTab": false
+      }
+    ],
+    "coords": "CHICAGO, IL\n41.8781° N, 87.6298° W\nFILE STATUS: ACTIVE"
+  },
+  "products": {
+    "visible": true,
+    "order": 10,
+    "eyebrow": "Project files",
+    "title": "The product lineup",
+    "intro": "Everything starts as a lab file. The ones that earn their stamp go to production. Here's what's on the board now."
+  },
+  "bench": {
+    "visible": true,
+    "order": 20,
+    "eyebrow": "On the bench",
+    "title": "Ideas in the lab — not yet released"
+  },
+  "about": {
+    "visible": true,
+    "order": 30,
+    "eyebrow": "The studio",
+    "title": "Small lab. Shipped products.",
+    "body": "We're a product studio that builds the whole thing — concept, design, engineering, and the unglamorous work of actually launching. We keep the lab small on purpose: fewer meetings, more shipping.",
+    "principles": [
+      {
+        "key": "PRINCIPLE 01",
+        "title": "Private where it counts",
+        "body": "When the data is personal — your collection, your messages, your plans — it should live on your hardware, not our servers."
+      },
+      {
+        "key": "PRINCIPLE 02",
+        "title": "No friction by default",
+        "body": "QR codes over downloads. An email over an account. If someone can't be using it in ten seconds, it's not done."
+      },
+      {
+        "key": "PRINCIPLE 03",
+        "title": "Excellent over average",
+        "body": "When there's a choice between \"it works\" and \"it's crafted,\" we choose crafted — and say so honestly when something isn't ready."
+      }
+    ]
+  },
+  "contact": {
+    "visible": true,
+    "order": 90,
+    "mode": "form",
+    "title": "Have a product that belongs on the board?",
+    "body": "We partner with collectors, galleries, founders, and teams who want something built well. Tell us what you're imagining.",
+    "buttonLabel": "info@georgestreetlabs.com",
+    "buttonUrl": "mailto:info@georgestreetlabs.com",
+    "form": {
+      "nameLabel": "Your name",
+      "emailLabel": "Email",
+      "showSubject": true,
+      "subjectLabel": "Subject",
+      "messageLabel": "What are you imagining?",
+      "submitLabel": "Send message",
+      "altText": "Prefer email? [info@georgestreetlabs.com](mailto:info@georgestreetlabs.com)"
+    },
+    "thanks": {
+      "title": "Message received.",
+      "body": "Thanks for reaching out — we read everything that comes in and usually reply within a couple of business days.",
+      "backLabel": "Back to the home page"
+    }
+  },
+  "customSections": []
+}

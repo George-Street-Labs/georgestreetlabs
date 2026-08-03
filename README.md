@@ -1,9 +1,94 @@
 # George Street Labs — georgestreetlabs.com
 
-Astro static site + Decap CMS. Products live in `src/content/products/` as
-markdown files; the admin panel at `/admin` edits them through your Git repo.
+Astro static site + Decap CMS. The admin panel at `/admin` edits everything
+through your Git repo — no code changes needed for content.
 
-## Each product has three controls
+## What the CMS controls
+
+| Section in `/admin` | Edits | Stored in |
+| --- | --- | --- |
+| **Home page** | Hero, every section's copy, section order, extra sections | `src/data/home.json` |
+| **Site settings** | Brand, navigation, footer, SEO defaults | `src/data/site.json` |
+| **Products** | The product lineup and the bench | `src/content/products/*.md` |
+| **Pages** | Top-level pages, rich text or raw HTML | `src/content/pages/*.md` |
+
+### Home page
+The hero is always at the top. Everything below it — Product lineup, On the
+bench, The studio, Contact, plus any **Extra sections** you add — is sorted by
+its **Position on the page** number, low to high. So an extra section with
+position 15 lands between Products (10) and the bench (20). Each section also
+has its own **Show this section?** switch.
+
+Four kinds of extra section are available: **Text block**, **Card grid**,
+**Call to action banner**, and **Custom HTML block**. Text and card sections
+take a *Look* — plain, white card, or dark panel. Give a section an **Anchor
+id** (say `pricing`) and you can point a nav link at `/#pricing`.
+
+The hero headline supports `*asterisks*` around words to highlight them green.
+
+### Navigation
+Site settings → Navigation. Two things feed the nav bar and they interleave:
+
+1. Links you type in the **Links** list (any URL — a `/#section`, a page, or an
+   external site).
+2. CMS pages with **Show in navigation** on, if **Also list CMS pages
+   automatically** is on.
+
+Both use the same **order** scale, lowest first. The stock links are Products
+10, The bench 20, Studio 30, Contact 90 — so give a page order 40 to place it
+between Studio and Contact. Turn off "Also list CMS pages automatically" to
+drive the nav entirely from the Links list.
+
+### Pages — rich text or custom HTML
+Every page is published at `georgestreetlabs.com/<name>/`. **Page type** picks
+which editor is used:
+
+- **Rich text** — the "Page content" editor, rendered in the styled prose card.
+- **Custom HTML** — the "HTML" box, pasted into the page verbatim.
+
+Custom HTML pages get extra controls under **Layout options**:
+*Header & footer* (keep the site chrome, or **Standalone** for a page that owns
+the whole viewport), *Show the title block?*, *Eyebrow text*, and *Full browser
+width?*. Under **Advanced / SEO** you can override the browser-tab title, inject
+extra `<head>` code (Open Graph tags, analytics), and set noindex.
+
+Your HTML inherits the site's fonts and CSS variables — `var(--ink)`,
+`var(--ink-soft)`, `var(--sign-green)`, `var(--tape-amber)`, `var(--line)`,
+`var(--paper)`, `var(--radius)` — and helper classes `.wrap`, `.btn.btn-primary`,
+`.btn.btn-ghost`, `.eyebrow`, `.section-title`. `src/content/pages/html-example.md`
+is a working template; delete it once you don't need it.
+
+### Contact form
+The Contact section shows a **contact form** (name, email, subject, message)
+backed by [Netlify Forms](https://docs.netlify.com/manage/forms/setup/) — no
+server, no third-party service. Spam is filtered two ways: Netlify's built-in
+**reCAPTCHA**, plus a hidden honeypot field bots fill in and people never see.
+
+Successful submissions redirect to `/thanks/`, whose wording is editable under
+Home page → Section — Contact → Thank-you page.
+
+Home page → Section — Contact → **What to show** flips between the form and the
+old plain email button. All field labels, the send-button text and the "Prefer
+email?" line beneath it are editable there too.
+
+**Two one-time steps in the Netlify dashboard** — the form will not collect
+anything until these are done:
+
+1. Site configuration → **Forms** → enable **Form detection**, then trigger a
+   redeploy. Netlify only registers forms found in a build made *after*
+   detection is on, so the first deploy with the form must come after this.
+2. Forms → **Form notifications** → *Add notification* → *Email notification* →
+   send to **info@georgestreetlabs.com**. This is the only place the recipient
+   address is set; it is deliberately not in the page source, so spammers can't
+   scrape it.
+
+Submissions are also always browsable under Forms in the Netlify dashboard, and
+free plans include 100 per month.
+
+Note the CAPTCHA box is empty when you run the site locally — Netlify injects
+the real widget at deploy time. That is expected; check it on the deployed site.
+
+### Each product has three controls
 - **Status** — the stamp shown (Production / Beta / In development / Prototype / Concept)
 - **Live product?** — ON = full featured card; OFF = small "On the bench" teaser
 - **Visible on site?** — OFF hides it completely
@@ -15,9 +100,12 @@ markdown files; the admin panel at `/admin` edits them through your Git repo.
 3. In Netlify: Site configuration → Identity → Enable Identity, then
    Identity → Services → Enable Git Gateway. Invite yourself as a user
    (Identity → Invite users). This is the login for /admin.
-4. In Netlify: Domain management → Add custom domain → georgestreetlabs.com.
+4. In Netlify: Site configuration → Forms → enable Form detection and redeploy,
+   then Forms → Form notifications → email notification to
+   info@georgestreetlabs.com. See "Contact form" above.
+5. In Netlify: Domain management → Add custom domain → georgestreetlabs.com.
    Netlify shows you the DNS records.
-5. In GoDaddy: My Products → georgestreetlabs.com → DNS → add/replace:
+6. In GoDaddy: My Products → georgestreetlabs.com → DNS → add/replace:
    - A record:    @    →  75.2.60.5        (Netlify's load balancer)
    - CNAME:       www  →  <your-site>.netlify.app
    Wait for DNS to propagate (minutes to a few hours); Netlify then issues

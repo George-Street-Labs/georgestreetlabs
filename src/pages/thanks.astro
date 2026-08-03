@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import home from '../data/home.json';
+import site from '../data/site.json';
+import { md } from '../lib/md';
+
+// Where the Netlify contact form redirects after a successful submission.
+const t = (home.contact as any).thanks ?? {};
+---
+<Base title={`${t.title || 'Message received.'}${site.seo.titleSuffix}`} noindex={true}>
+  <main class="thanks">
+    <div class="wrap">
+      <div class="thanks-card">
+        <div class="check" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <div class="eyebrow">{site.brand.name}</div>
+        <h1>{t.title || 'Message received.'}</h1>
+        {t.body && <div class="thanks-body" set:html={md(t.body)} />}
+        <a class="btn btn-primary" href="/">{t.backLabel || 'Back to the home page'}</a>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+.thanks{padding:96px 0 110px}
+.thanks-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:52px 48px;max-width:640px;margin:0 auto;text-align:center}
+@media(max-width:640px){.thanks-card{padding:36px 26px}}
+.check{width:56px;height:56px;margin:0 auto 22px;border-radius:50%;background:rgba(14,122,79,.10);color:var(--sign-green);display:flex;align-items:center;justify-content:center}
+.check svg{width:28px;height:28px}
+.eyebrow{justify-content:center}
+.eyebrow::after{display:none}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4vw,38px);line-height:1.12;letter-spacing:-.015em;margin-bottom:14px}
+.thanks-body{color:var(--ink-soft);font-size:15.5px;margin-bottom:30px}
+.thanks-body :global(p){margin-bottom:12px}
+.thanks-body :global(p:last-child){margin-bottom:0}
+.thanks-body :global(a){color:var(--sign-green-dark);font-weight:500}
+</style>
