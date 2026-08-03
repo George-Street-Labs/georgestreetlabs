@@ -4,13 +4,6 @@
     "description": ""
   },
   "hero": {
-    "visible": true,
-    "showSign": true,
-    "signMain": "George St",
-    "signSub": "L A B S",
-    "signTab": "EST. 2026",
-    "headline": "Apps built for *real life*, not just screens.",
-    "lede": "George Street Labs is a small product workshop. We take ideas from sketch to shipped — starting with ArtView Privé, a private gallery for the art you actually own.",
     "ctas": [
       {
         "label": "See what we're building →",
@@ -25,6 +18,13 @@
         "newTab": false
       }
     ],
+    "signSub": "L A B S",
+    "visible": true,
+    "headline": "Apps built for *real life*, not just screens.",
+    "signMain": "George St",
+    "signTab": "EST. 2024",
+    "showSign": true,
+    "lede": "George Street Labs is a small product workshop. We take ideas from sketch to shipped — starting with ArtView Privé, a private gallery for the art you actually own.",
     "coords": "CHICAGO, IL\n41.8781° N, 87.6298° W\nFILE STATUS: ACTIVE"
   },
   "products": {
@@ -65,13 +65,9 @@
     ]
   },
   "contact": {
-    "visible": true,
-    "order": 90,
-    "mode": "form",
-    "title": "Have a product that belongs on the board?",
     "body": "We partner with collectors, galleries, founders, and teams who want something built well. Tell us what you're imagining.",
-    "buttonLabel": "info@georgestreetlabs.com",
-    "buttonUrl": "mailto:info@georgestreetlabs.com",
+    "buttonLabel": "",
+    "mode": "form",
     "form": {
       "nameLabel": "Your name",
       "emailLabel": "Email",
@@ -85,7 +81,11 @@
       "title": "Message received.",
       "body": "Thanks for reaching out — we read everything that comes in and usually reply within a couple of business days.",
       "backLabel": "Back to the home page"
-    }
+    },
+    "order": 90,
+    "visible": true,
+    "title": "Have a product that belongs on the board?",
+    "buttonUrl": ""
   },
   "customSections": []
 }
