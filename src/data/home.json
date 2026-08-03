@@ -75,7 +75,7 @@
       "subjectLabel": "Subject",
       "messageLabel": "What are you imagining?",
       "submitLabel": "Send message",
-      "altText": "Prefer email? [info@georgestreetlabs.com](mailto:info@georgestreetlabs.com)"
+      "altText": ""
     },
     "thanks": {
       "title": "Message received.",
