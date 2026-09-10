@@ -65,7 +65,7 @@
     ]
   },
   "contact": {
-    "body": "We partner with collectors, galleries, founders, and teams who want something built well. Tell us what you're imagining.",
+    "body": "We partner with developer, collectors, galleries, founders, and teams who want something built well. Tell us what you're imagining. Have a questions about any of our products let us know. We are small but mighty!",
     "buttonLabel": "",
     "mode": "form",
     "form": {
@@ -73,7 +73,7 @@
       "emailLabel": "Email",
       "showSubject": true,
       "subjectLabel": "Subject",
-      "messageLabel": "What are you imagining?",
+      "messageLabel": "Let us know your thoughts, what you are imagining or what we can do to help.",
       "submitLabel": "Send message",
       "altText": ""
     },
@@ -84,7 +84,7 @@
     },
     "order": 90,
     "visible": true,
-    "title": "Have a product that belongs on the board?",
+    "title": "Have a product that belongs on the board or looking to talk with someone?",
     "buttonUrl": ""
   },
   "customSections": []
