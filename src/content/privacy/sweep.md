@@ -74,7 +74,8 @@ We may update this Policy from time to time. Material changes will be reflected 
 ### 11. Contact
 
 George Street Labs LLC
-3023 N Clark Street
+3023 N Clark Street\
+Suite 151
 Chicago, IL 60614
 Email: [info@georgestreetlabs.com](mailto:info@georgestreetlabs.com)
 
