@@ -65,6 +65,8 @@ const footerLinks = [...((site.footer.links ?? []) as any[]), ...privacyFooterLi
   .sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
 
 const isCurrent = (url: string) => Astro.url.pathname === url;
+
+const gaId = site.analytics?.googleAnalyticsId;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -146,6 +148,17 @@ footer{border-top:1px solid var(--line);padding:36px 0 48px;font-size:13px;color
 .foot-links a:hover{color:var(--ink)}
 </style>
 {headHtml && <Fragment set:html={headHtml} />}
+{gaId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(...args) { window.dataLayer.push(args); }
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </>
+)}
 </head>
 <body>
 

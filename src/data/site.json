@@ -9,6 +9,9 @@
     "titleSuffix": " — George Street Labs",
     "defaultDescription": "George Street Labs is a small product studio. Our flagship, ArtView Privé, presents your art collection like a private gallery — local-first and museum-grade."
   },
+  "analytics": {
+    "googleAnalyticsId": "G-Z3623WWTN0"
+  },
   "nav": {
     "includePages": true,
     "links": [
