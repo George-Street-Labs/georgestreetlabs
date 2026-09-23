@@ -9,5 +9,6 @@ live: true
 visible: true
 order: 99
 features: []
+appStoreUrl: https://apps.apple.com/us/app/sweep-2d-3d-instant-floorplan/id6788948402?ref=GSL
 ---
 Sweep turns your iPhone's LiDAR scanner into a professional floor-plan tool. Walk through a space, and Sweep builds an accurate 2D floor plan and 3D model as you go — no measuring tape, no CAD software, no guesswork.
