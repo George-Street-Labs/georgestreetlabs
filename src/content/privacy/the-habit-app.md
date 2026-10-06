@@ -1,5 +1,5 @@
 ---
-title: The Habit App
+title: HabitApp
 summary: Keep track of sets, reps, and items
 platforms:
   - iOS, Android
