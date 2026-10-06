@@ -1,9 +1,9 @@
 ---
-title: HabitApp
+title: The Habit App
 summary: Keep track of sets, reps, and items
 platforms:
   - iOS, Android
-effectiveDate: October 2026
+effectiveDate: September 2026
 order: 40
 visible: true
 policyType: standard
