@@ -86,4 +86,4 @@ If you have any questions about this Privacy Policy, please contact us:
 
 **George Street Labs LLC** 3023 N Clark St, Ste 151 Chicago, IL 60657 Email: info@georgestreetlabs.com
 
-This policy is also published at https://georgestreetlabs.com/privacy/habitapp
+This policy is also published at https://georgestreetlabs.com/privacy/the-habit-app
